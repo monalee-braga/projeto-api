@@ -31,6 +31,15 @@ class UsuarioController {
     });
   }
 
+  static async findByEmail(email) { 
+    try {
+      const RESPONSE = await usuarios.findOne({'email': email});
+      return RESPONSE;
+    } catch (error) {
+      return error;
+    }
+  }
+
   static create = async (req, res) => {
     let senha = req.body.senha;
 
@@ -69,6 +78,10 @@ class UsuarioController {
         res.status(500).send({message: `${err.message} - Falha ao remover produto`});
       }
     });
+  }
+
+  static login = (req, res) => {
+    res.status(204).send({message: 'Login'});
   }
 }
 

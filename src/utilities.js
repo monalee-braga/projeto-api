@@ -12,6 +12,12 @@ class Utilities {
       return false;
     return true;
   }
+
+  static async verifyPassword(password, passwordHash) {
+    const userPassword = await bcrypt.compare(password, passwordHash);
+    if(!userPassword) return false;
+    return true;
+  }
 }
 
 export default Utilities;
