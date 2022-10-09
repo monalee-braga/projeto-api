@@ -1,4 +1,5 @@
 import usuarios from '../models/Usuario.js';
+import Utilities from "../utilities.js";
 
 class UsuarioController {
   static findAll = (req, res) => {
@@ -30,16 +31,21 @@ class UsuarioController {
     });
   }
 
-  static create = (req, res) => {
-    let produto = new usuarios(req.body);
+  static create = async (req, res) => {
+    let senha = req.body.senha;
 
-    produto.save((err) => {
-      if(err) {
-        res.status(500).send({message: `${err.message} - Falha ao cadastrar produto`});
-      } else {
-        res.status(201).send(produto.toJSON());
-      }
-    })
+    if(await Utilities.validatePassword(senha)) {
+      req.body.senha = await Utilities.generatePasswordHash(req.body.senha);
+      let produto = new usuarios(req.body);
+
+      produto.save((err) => {
+        if(err) {
+          res.status(500).send({message: `${err.message} - Falha ao cadastrar produto`});
+        } else {
+          res.status(201).send(produto.toJSON());
+        }
+      })
+    }
   }
 
   static update = (req, res) => {
