@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
 
-mongoose.connect('mongodb+srv://monalee:0RvR02RW1cWRoaR2@cluster-mona.hrz1zpc.mongodb.net/projeto-node?');
+mongoose.connect(process.env.DATABASE_URL);
 
 let db = mongoose.connection; 
 

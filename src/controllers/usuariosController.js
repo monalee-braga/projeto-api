@@ -81,7 +81,9 @@ class UsuarioController {
   }
 
   static login = (req, res) => {
-    res.status(204).send({message: 'Login'});
+    const token = Utilities.createTokenJWT(req.user);
+    res.set('Authorization', token);
+    res.status(204).send();
   }
 }
 

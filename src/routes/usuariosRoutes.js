@@ -5,7 +5,7 @@ import passport from "passport";
 const router = express.Router(); 
 
 router
-  .get("/usuarios", UsuarioController.findAll)
+  .get("/usuarios", passport.authenticate('bearer', { session: false }), UsuarioController.findAll)
   .get("/usuarios/filtro", UsuarioController.findByName)
   .get("/usuarios/:id", UsuarioController.findById)
   .post("/usuarios/login", passport.authenticate('local', {session: false}), UsuarioController.login)
