@@ -1,16 +1,16 @@
 import express from "express";
 import ProdutoController from "../controllers/produtosController.js";
-import passport from "passport";
+import { local, bearer } from "../../src/auth/middlewares.js";
 
 const router = express.Router(); 
 
 //As rotas devem ser ordenadas da mais específica para a menos específica  
 router
-  .get("/produtos", ProdutoController.findAll)
-  .get("/produtos/filtro", ProdutoController.findByName)
-  .get("/produtos/:id", ProdutoController.findById)
-  .post("/produtos", passport.authenticate('bearer', { session: false }), ProdutoController.create)
-  .put("/produtos/:id", ProdutoController.update)
-  .delete("/produtos/:id", ProdutoController.remove);
+  .get("/produtos", bearer, ProdutoController.findAll)
+  .get("/produtos/filtro", bearer, ProdutoController.findByName)
+  .get("/produtos/:id", bearer, ProdutoController.findById)
+  .post("/produtos", local, ProdutoController.create)
+  .put("/produtos/:id", bearer, ProdutoController.update)
+  .delete("/produtos/:id", bearer, ProdutoController.remove);
 
 export default router;

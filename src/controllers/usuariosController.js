@@ -40,6 +40,20 @@ class UsuarioController {
     }
   }
 
+  static async findOne(id) {
+    try {
+      await usuarios.findById(id, (err, user) => {
+        if(err) {
+          return err;
+        } else {
+          return user;
+        }
+      });
+    } catch (error) {
+      return error;
+    }
+  }
+
   static create = async (req, res) => {
     let senha = req.body.senha;
 
