@@ -1,16 +1,16 @@
 import express from "express";
-import ProdutoController from "../controllers/produtosController.js";
+import ProductController from "../controllers/produtosController.js";
 import { local, bearer } from "../../src/auth/middlewares.js";
 
-const router = express.Router(); 
+const router = express.Router();
 
-//As rotas devem ser ordenadas da mais específica para a menos específica  
+//As rotas devem ser ordenadas da mais específica para a menos específica
 router
-  .get("/produtos", bearer, ProdutoController.findAll)
-  .get("/produtos/filtro", bearer, ProdutoController.findByName)
-  .get("/produtos/:id", bearer, ProdutoController.findById)
-  .post("/produtos", local, ProdutoController.create)
-  .put("/produtos/:id", bearer, ProdutoController.update)
-  .delete("/produtos/:id", bearer, ProdutoController.remove);
+  .get("/api/product", bearer, ProductController.findAll)
+  .get("/api/product/filtro", bearer, ProductController.findByName)
+  .get("/api/product/:id", bearer, ProductController.findById)
+  .post("/api/product", local, ProductController.create)
+  .put("/api/product/:id", bearer, ProductController.update)
+  .delete("/api/product/:id", bearer, ProductController.remove);
 
 export default router;

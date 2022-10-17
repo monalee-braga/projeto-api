@@ -1,104 +1,92 @@
-import usuarios from '../models/Usuario.js';
+import users from "../models/Usuario.js";
 import Utilities from "../utilities.js";
 
-class UsuarioController {
+class UserController {
   static findAll = (req, res) => {
-    usuarios.find((err, usuarios) => {
-      res.status(200).json(usuarios);
+    users.find((err, users) => {
+      res.status(200).json(users);
     });
-  }
+  };
 
   static findById = (req, res) => {
-    const id = req.params.id; 
+    const id = req.params.id;
 
-    usuarios.findById(id, (err, usuarios) => {
-      if(err) {
-        res.status(400).send({message: `${err.message}`});
+    users.findById(id, (err, users) => {
+      if (err) {
+        res.status(400).send({ message: `${err.message}` });
       } else {
-        res.status(200).json(usuarios);
+        res.status(200).json(users);
       }
     });
-  }
+  };
 
   static findByName = (req, res) => {
-    const nome = req.body.model.nome;
-    usuarios.find({'nome': nome}, {}, (err, usuarios) => {
-      if(err) {
-        res.status(500).send({message: `${err.message}`});
+    const name = req.body.model.name;
+    users.find({ name: name }, {}, (err, users) => {
+      if (err) {
+        res.status(500).send({ message: `${err.message}` });
       } else {
-        res.status(200).send(usuarios);
+        res.status(200).send(users);
       }
     });
-  }
+  };
 
-  static async findByEmail(email) { 
+  static async findByEmail(email) {
     try {
-      const RESPONSE = await usuarios.findOne({'email': email});
+      const RESPONSE = await users.findOne({ email: email });
       return RESPONSE;
     } catch (error) {
       return error;
     }
   }
 
-  static async findOne(id) {
-    try {
-      await usuarios.findById(id, (err, user) => {
-        if(err) {
-          return err;
+  static create = async (req, res) => {
+    let password = req.body.password;
+
+    if (await Utilities.validatePassword(password)) {
+      req.body.password = await Utilities.generatePasswordHash(
+        req.body.password
+      );
+      let product = new users(req.body);
+
+      product.save((err) => {
+        if (err) {
+          res
+            .status(500)
+            .send({ message: `${err.message} - Falha ao cadastrar produto` });
         } else {
-          return user;
+          res.status(201).send(product.toJSON());
         }
       });
-    } catch (error) {
-      return error;
     }
-  }
-
-  static create = async (req, res) => {
-    let senha = req.body.senha;
-
-    if(await Utilities.validatePassword(senha)) {
-      req.body.senha = await Utilities.generatePasswordHash(req.body.senha);
-      let produto = new usuarios(req.body);
-
-      produto.save((err) => {
-        if(err) {
-          res.status(500).send({message: `${err.message} - Falha ao cadastrar produto`});
-        } else {
-          res.status(201).send(produto.toJSON());
-        }
-      })
-    }
-  }
+  };
 
   static update = (req, res) => {
-    const id = req.params.id; 
+    const id = req.params.id;
 
-    usuarios.findByIdAndUpdate(id, {$set: req.body.model}, (err) => {
-      if(!err) {
-        res.status(200).send({message: 'Usuário atualizado com sucesso'});
+    users.findByIdAndUpdate(id, { $set: req.body.model }, (err) => {
+      if (!err) {
+        res.status(200).send({ message: "Usuário atualizado com sucesso" });
       } else {
-        res.status(500).send({message: `${err.message} - Falha ao atualizar produto`});
+        res
+          .status(500)
+          .send({ message: `${err.message} - Falha ao atualizar produto` });
       }
     });
-  }
+  };
 
   static remove = (req, res) => {
-    const {id} = req.params; // Atribuição via desestruturação (destructuring assignment)
-    usuarios.findByIdAndDelete(id, (err) => {
-      if(!err) {
-        res.status(200).send({message: 'Usuário removido com sucesso'});
+    const { id } = req.params; // Atribuição via desestruturação (destructuring assignment)
+    users.findByIdAndDelete(id, (err) => {
+      if (!err) {
+        res.status(200).send({ message: "Usuário removido com sucesso" });
       } else {
-        res.status(500).send({message: `${err.message} - Falha ao remover produto`});
+        res
+          .status(500)
+          .send({ message: `${err.message} - Falha ao remover produto` });
       }
     });
-  }
-
-  static login = (req, res) => {
-    const token = Utilities.createTokenJWT(req.user);
-    res.set('Authorization', token);
-    res.status(204).send();
-  }
+  };
 }
 
-export default UsuarioController;
+export default UserController;
