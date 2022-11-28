@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const productSchema = new mongoose.Schema({
   id: { type: String },
@@ -7,11 +7,11 @@ const productSchema = new mongoose.Schema({
   color: { type: String, required: true },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
+    ref: 'user',
     required: true,
   },
 });
 
-const products = mongoose.model("products", productSchema);
+const products = mongoose.model('products', productSchema);
 
 export default products;

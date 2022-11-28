@@ -1,6 +1,6 @@
-import users from "../models/Usuario.js";
-import token from "../models/Token.js";
-import Utilities from "../utilities.js";
+import users from '../models/User.js';
+import token from '../models/Token.js';
+import Utilities from '../utilities.js';
 
 class AuthController {
   static async findByEmail(email) {
@@ -31,7 +31,7 @@ class AuthController {
 
     if (await Utilities.validatePassword(password)) {
       req.body.password = await Utilities.generatePasswordHash(
-        req.body.password
+        req.body.password,
       );
       let user = new users(req.body);
 
@@ -51,13 +51,14 @@ class AuthController {
     try {
       const user = req.user;
       const accessToken = Utilities.createTokenJWT(user);
+      const refreshToken = Utilities.createTokenRefresh(user);
 
-      const expiredAt = new Date();
-      expiredAt.setMinutes(expiredAt.getMinutes() + 15);
+      const createdAt = Utilities.generateDate('', 0, 0);
+      const expiredAt = Utilities.generateDate(createdAt, 1, 15);
 
       let model = {
         userId: user._id,
-        createdAt: new Date(),
+        createdAt: createdAt,
         token: accessToken,
         expiredAt: expiredAt,
       };
@@ -66,17 +67,15 @@ class AuthController {
 
       newToken.save((err) => {
         if (err) {
-          console.log(err);
           res
             .status(500)
             .send({ message: `${err.message} - Falha ao salvar token` });
         } else {
-          res.set("Authorization", accessToken);
-          res.status(204).send();
+          res.set('Authorization', accessToken);
+          res.status(200).send({ refreshToken });
         }
       });
     } catch (error) {
-      console.log(error);
       res.status(500).send({ message: `${error}` });
     }
   };
@@ -84,11 +83,11 @@ class AuthController {
   static logout = async (req, res) => {
     let bearerToken = req.headers.authorization;
     if (typeof bearerToken !== undefined) {
-      const accessToken = bearerToken.split(" ")[1];
+      const accessToken = bearerToken.split(' ')[1];
       const tokenObject = await token.findOne({ token: accessToken });
       token.findByIdAndDelete(tokenObject._id, (err) => {
         if (!err) {
-          res.status(200).send({ message: "Logout realizado com sucesso" });
+          res.status(200).send({ message: 'Logout realizado com sucesso' });
         } else {
           res.status(500).send({ message: `${err}` });
         }

@@ -1,5 +1,5 @@
-import users from "../models/Usuario.js";
-import Utilities from "../utilities.js";
+import users from '../models/User.js';
+import Utilities from '../utilities.js';
 
 class UserController {
   static findAll = (req, res) => {
@@ -45,7 +45,7 @@ class UserController {
 
     if (await Utilities.validatePassword(password)) {
       req.body.password = await Utilities.generatePasswordHash(
-        req.body.password
+        req.body.password,
       );
       let product = new users(req.body);
 
@@ -66,7 +66,7 @@ class UserController {
 
     users.findByIdAndUpdate(id, { $set: req.body.model }, (err) => {
       if (!err) {
-        res.status(200).send({ message: "Usuário atualizado com sucesso" });
+        res.status(200).send({ message: 'Usuário atualizado com sucesso' });
       } else {
         res
           .status(500)
@@ -79,7 +79,7 @@ class UserController {
     const { id } = req.params; // Atribuição via desestruturação (destructuring assignment)
     users.findByIdAndDelete(id, (err) => {
       if (!err) {
-        res.status(200).send({ message: "Usuário removido com sucesso" });
+        res.status(200).send({ message: 'Usuário removido com sucesso' });
       } else {
         res
           .status(500)

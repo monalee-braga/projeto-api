@@ -1,9 +1,10 @@
-import passport from "passport";
-import passportLocal from "passport-local";
-import AuthController from "../../src/controllers/authController.js";
-import passportHttpBearer from "passport-http-bearer";
-import jwt from "jsonwebtoken";
-import Utilities from "../utilities.js";
+/* eslint-disable import/extensions */
+import passport from 'passport';
+import passportLocal from 'passport-local';
+import passportHttpBearer from 'passport-http-bearer';
+import jwt from 'jsonwebtoken';
+import AuthController from '../controllers/authController.js';
+import Utilities from '../utilities.js';
 
 const BearerStrategy = passportHttpBearer.Strategy;
 const LocalStrategy = passportLocal.Strategy;
@@ -11,28 +12,29 @@ const LocalStrategy = passportLocal.Strategy;
 const authentication = passport.use(
   new LocalStrategy(
     {
-      usernameField: "email",
-      passwordField: "password",
+      usernameField: 'email',
+      passwordField: 'password',
       session: false,
     },
     async (email, password, done) => {
       try {
-        let user = await AuthController.findByEmail(email);
-        if (!user) return done(null, false, { message: "User not found." });
+        const user = await AuthController.findByEmail(email);
+        if (!user) return done(null, false, { message: 'User not found.' });
 
-        let verifyPassword = await Utilities.verifyPassword(
+        const verifyPassword = await Utilities.verifyPassword(
           password,
-          user.password
+          user.password,
         );
-        if (!verifyPassword)
-          return done(null, false, { message: "Invalid password." });
+        if (!verifyPassword) {
+          return done(null, false, { message: 'Invalid password.' });
+        }
 
         return done(null, user);
       } catch (error) {
         done(error);
       }
-    }
-  )
+    },
+  ),
 );
 
 const authenticationBearer = passport.use(
@@ -49,7 +51,7 @@ const authenticationBearer = passport.use(
     } catch (error) {
       done(error);
     }
-  })
+  }),
 );
 
 export default { authentication, authenticationBearer };

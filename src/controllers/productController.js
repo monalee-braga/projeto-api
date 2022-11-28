@@ -1,10 +1,10 @@
-import products from "../models/Produto.js";
+import products from '../models/Product.js';
 
 class ProductController {
   static findAll = (req, res) => {
     products
       .find()
-      .populate("userId", "name")
+      .populate('userId', 'name')
       .exec((err, products) => {
         res.status(200).json(products);
       });
@@ -52,7 +52,7 @@ class ProductController {
 
     products.findByIdAndUpdate(id, { $set: req.body.model }, (err) => {
       if (!err) {
-        res.status(200).send({ message: "Produto atualizado com sucesso" });
+        res.status(200).send({ message: 'Produto atualizado com sucesso' });
       } else {
         res
           .status(500)
@@ -65,7 +65,7 @@ class ProductController {
     const { id } = req.params; // Atribuição via desestruturação (destructuring assignment)
     products.findByIdAndDelete(id, (err) => {
       if (!err) {
-        res.status(200).send({ message: "Produto removido com sucesso" });
+        res.status(200).send({ message: 'Produto removido com sucesso' });
       } else {
         res
           .status(500)

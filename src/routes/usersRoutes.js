@@ -1,9 +1,9 @@
-import express from "express";
-import UserController from "../controllers/usuariosController.js";
-import { local, bearer } from "../../src/auth/middlewares.js";
+import express from 'express';
+import UserController from '../controllers/userController.js';
+import { local, bearer } from '../../src/auth/middlewares.js';
 
 const router = express.Router();
-const prefixRoute = "/api/v1/users";
+const prefixRoute = '/api/v1/users';
 
 router
   .get(prefixRoute, bearer, UserController.findAll)
