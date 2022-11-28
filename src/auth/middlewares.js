@@ -10,8 +10,6 @@ export function local(req, res, next) {
       return res.status(500).json({ erro: erro.message });
     }
 
-    console.log(erro);
-
     if (!usuario) {
       return res.status(401).json();
     }

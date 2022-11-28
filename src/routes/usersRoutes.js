@@ -3,13 +3,20 @@ import UserController from '../controllers/userController.js';
 import { local, bearer } from '../../src/auth/middlewares.js';
 
 const router = express.Router();
-const prefixRoute = '/api/v1/users';
 
 router
-  .get(prefixRoute, bearer, UserController.findAll)
-  .get(`${prefixRoute}/filtro`, bearer, UserController.findByName)
-  .post(prefixRoute, bearer, UserController.create)
-  .put(`${prefixRoute}/:id`, bearer, UserController.update)
-  .delete(`${prefixRoute}/:id`, bearer, UserController.remove);
+  .get(`${process.env.PREFIX_ROUTE}/users`, bearer, UserController.findAll)
+  .get(
+    `${process.env.PREFIX_ROUTE}/users/filtro`,
+    bearer,
+    UserController.findByName,
+  )
+  .post(`${process.env.PREFIX_ROUTE}/users`, bearer, UserController.create)
+  .put(`${process.env.PREFIX_ROUTE}/users/:id`, bearer, UserController.update)
+  .delete(
+    `${process.env.PREFIX_ROUTE}/users/:id`,
+    bearer,
+    UserController.remove,
+  );
 
 export default router;
