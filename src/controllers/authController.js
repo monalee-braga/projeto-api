@@ -1,11 +1,17 @@
-import users from '../models/User.js'
-import token from '../models/Token.js'
+import Users from '../models/User.js'
+import Token from '../models/Token.js'
 import Utilities from '../utilities.js'
 
 class AuthController {
   static async findByEmail (email) {
     try {
-      return await users.findOne({ email: email })
+      await Users.findOne(email, (err, user) => {
+        if (err) {
+          return err
+        } else {
+          return user
+        }
+      })
     } catch (error) {
       return error
     }
@@ -13,7 +19,7 @@ class AuthController {
 
   static async findOne (id) {
     try {
-      await users.findById(id, (err, user) => {
+      await Users.findById(id, (err, user) => {
         if (err) {
           return err
         } else {
@@ -32,15 +38,15 @@ class AuthController {
       req.body.password = await Utilities.generatePasswordHash(
         req.body.password
       )
-      const userModel = new users(req.body)
+      const user = new Users(req.body)
 
-      userModel.save((err) => {
+      user.save((err) => {
         if (err) {
           res
             .status(500)
             .send({ message: `${err.message} - Falha ao cadastrar usuário` })
         } else {
-          res.status(201).send(userModel.toJSON())
+          res.status(201).send(user.toJSON())
         }
       })
     }
@@ -62,9 +68,9 @@ class AuthController {
         expiredAt
       }
 
-      const Newtoken = new token(model)
+      const newToken = new Token(model)
 
-      Newtoken.save((err) => {
+      newToken.save((err) => {
         if (err) {
           res
             .status(500)
@@ -83,8 +89,8 @@ class AuthController {
     const bearerToken = req.headers.authorization || ''
     if (bearerToken) {
       const accessToken = bearerToken.split(' ')[1]
-      const tokenObject = await token.findOne({ token: accessToken })
-      token.findByIdAndDelete(tokenObject._id, (err) => {
+      const tokenObject = await Token.findOne({ token: accessToken })
+      Token.findByIdAndDelete(tokenObject._id, (err) => {
         if (!err) {
           res.status(200).send({ message: 'Logout realizado com sucesso' })
         } else {
@@ -95,7 +101,7 @@ class AuthController {
   }
 
   static async findToken (accessToken) {
-    const tokenObject = await token.findOne({ token: accessToken })
+    const tokenObject = await Token.findOne({ token: accessToken })
     if (tokenObject) return true
     else return false
   }
