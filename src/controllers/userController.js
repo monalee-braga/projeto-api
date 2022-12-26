@@ -5,9 +5,11 @@ class UserController {
   static findAll = (req, res) => {
     Users.find((err, users) => {
       if (err) {
-        res.status(500).json(err)
+        res.status(400).send({ message: `${err.message}` })
+      } else {
+        res.status(200).json(users)
       }
-      res.status(200).json(users)
+      return true
     })
   }
 
