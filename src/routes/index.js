@@ -1,14 +1,14 @@
-import express from 'express';
-import users from './usersRoutes.js';
-import auth from './authRoutes.js';
-import authentication from '../auth/authentication.js';
+import express from 'express'
+import users from './usersRoutes.js'
+import auth from './authRoutes.js'
+// import authentication from '../auth/authentication.js'
 
 const routes = (app) => {
   app.route('/').get((req, res) => {
-    res.status(200).send('Curso de Node');
-  });
+    res.status(200).send('Curso de Node')
+  })
 
-  app.use(express.json(), auth, users);
-};
+  app.use(express.json(), auth, users)
+}
 
-export default routes;
+export default routes
