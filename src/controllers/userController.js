@@ -31,7 +31,7 @@ class UserController {
     });
   };
 
-  static async findByEmail(email) {
+  static findByEmail = async (email) => {
     try {
       const RESPONSE = await users.findOne({ email: email });
       return RESPONSE;
