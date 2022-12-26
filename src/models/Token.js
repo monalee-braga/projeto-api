@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose'
 
 const tokenSchema = new mongoose.Schema({
   id: { type: String },
@@ -7,11 +7,11 @@ const tokenSchema = new mongoose.Schema({
   expiredAt: { type: Date, required: true },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "users",
-    required: true,
-  },
-});
+    ref: 'users',
+    required: true
+  }
+})
 
-const token = mongoose.model("tokens", tokenSchema);
+const token = mongoose.model('tokens', tokenSchema)
 
-export default token;
+export default token
