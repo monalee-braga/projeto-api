@@ -19,7 +19,7 @@ const authentication = passport.use(
     async (email, password, done) => {
       try {
         const user = await AuthController.findByEmail(email)
-        if (!user) return done(null, false, { message: 'User not found.' })
+        if (!user) return done(null, false, { message: 'Usuário não encontrado.' })
 
         const verifyPassword = await Utilities.verifyPassword(
           password,

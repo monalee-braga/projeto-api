@@ -1,6 +1,6 @@
 import express from 'express'
 import UserController from '../controllers/userController.js'
-import { bearer } from '../../src/auth/middlewares.js'
+import { bearer } from '../../src/middlewares/auth.js'
 
 const router = express.Router()
 

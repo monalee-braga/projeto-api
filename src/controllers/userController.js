@@ -63,7 +63,7 @@ class UserController {
         if (err) {
           res
             .status(500)
-            .send({ message: `${err.message} - Falha ao cadastrar produto` })
+            .send({ message: `${err.message} - Falha ao cadastrar usuário` })
         } else {
           res.status(201).send(product.toJSON())
         }
@@ -80,7 +80,7 @@ class UserController {
       } else {
         res
           .status(500)
-          .send({ message: `${err.message} - Falha ao atualizar produto` })
+          .send({ message: `${err.message} - Falha ao atualizar usuário` })
       }
     })
   }
@@ -93,7 +93,7 @@ class UserController {
       } else {
         res
           .status(500)
-          .send({ message: `${err.message} - Falha ao remover produto` })
+          .send({ message: `${err.message} - Falha ao remover usuário` })
       }
     })
   }
