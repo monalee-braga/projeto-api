@@ -1,7 +1,7 @@
 import express from 'express'
 import users from './usersRoutes.js'
 import auth from './authRoutes.js'
-// import authentication from '../auth/authentication.js'
+import authentication from '../middlewares/authStrategy.js'
 
 const routes = (app) => {
   app.route('/').get((req, res) => {

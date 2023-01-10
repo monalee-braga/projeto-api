@@ -5,13 +5,9 @@ import Utilities from '../utilities.js'
 class AuthController {
   static async findByEmail (email) {
     try {
-      await Users.findOne(email, (err, user) => {
-        if (err) {
-          return err
-        } else {
-          return user
-        }
-      })
+      const user = await Users.findOne({ email: email }).select('+password')
+      if(!user) res.status(400).send({ error: 'User not found' })
+      return user
     } catch (error) {
       return error
     }
@@ -63,7 +59,6 @@ class AuthController {
 
       const model = {
         userId: user._id,
-        createdAt,
         token: accessToken,
         expiredAt
       }

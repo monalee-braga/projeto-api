@@ -12,7 +12,7 @@ export function local (req, res, next) {
     }
 
     if (!usuario) {
-      return res.status(401).json()
+      return res.status(401).json({ erro: 'Incorrect email or password' })
     }
 
     req.user = usuario
