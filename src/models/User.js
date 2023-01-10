@@ -3,12 +3,13 @@ import mongoose from 'mongoose'
 const userSchema = new mongoose.Schema({
   id: { type: String },
   name: { type: String, required: true },
-  email: { type: String, required: true },
-  password: { type: String, required: true },
+  email: { type: String, unique: true, required: true, lowercase: true },
+  password: { type: String, required: true, select: false },
   permission: { type: String, required: true },
-  telephone: { type: String }
+  telephone: { type: String },
+  createAt: { type: Date, default: Date.now }
 })
 
-const users = mongoose.model('users', userSchema)
+const user = mongoose.model('user', userSchema)
 
-export default users
+export default user
